@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' data: blob:;" />
+  <title>SkinSwitcher</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+
+  <!-- ===================== Titelleiste ===================== -->
+  <header class="titlebar">
+    <div class="acc-switch no-drag">
+      <button id="accBtn" class="acc-pill glass">
+        <canvas id="accHead" width="28" height="28"></canvas>
+        <span id="accName">Kein Account</span>
+        <svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div id="accMenu" class="menu glass-panel hidden">
+        <div id="accList"></div>
+        <button id="accAdd" class="menu-item add">
+          <span class="plus">+</span> Microsoft-Account hinzufügen
+        </button>
+      </div>
+    </div>
+
+    <div class="brand">Skin<b>Switcher</b></div>
+
+    <div class="title-actions no-drag">
+      <button id="settingsBtn" class="icon-btn" title="Einstellungen (Strg+,)">
+        <svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ===================== Linke Leiste ===================== -->
+    <nav class="rail glass-panel">
+      <button class="rail-btn active" data-view="folder" title="Ordner (Strg+1)">
+        <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Ordner</span>
+      </button>
+      <button class="rail-btn" data-view="history" title="Zuletzt verwendet (Strg+2)">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
+        <span>Verlauf</span>
+        <i id="histCount" class="rail-count hidden"></i>
+      </button>
+      <i class="rail-glow"></i>
+    </nav>
+
+    <!-- ===================== Bibliothek ===================== -->
+    <section class="library">
+      <div class="toolbar">
+        <button id="upBtn" class="icon-btn folder-only" title="Übergeordneter Ordner (Backspace)" disabled>
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <nav id="crumbs" class="crumbs folder-only"></nav>
+        <div class="view-title history-only">Zuletzt verwendet <span id="histSub" class="muted"></span></div>
+        <div class="spacer"></div>
+        <div class="search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="search" placeholder="Skins suchen…  (Strg+F)" />
+        </div>
+        <button id="favFilter" class="icon-btn toggle folder-only" title="Nur Favoriten">
+          <svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+        </button>
+        <input id="zoom" type="range" min="110" max="220" value="150" title="Kartengröße" />
+        <button id="refreshBtn" class="icon-btn folder-only" title="Neu laden (F5)">
+          <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+        </button>
+        <button id="histClear" class="ghost-btn history-only">🗑 Verlauf leeren</button>
+        <button id="folderBtn" class="glass-btn small folder-only">
+          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Ordner wählen
+        </button>
+      </div>
+
+      <div id="grid" class="grid"></div>
+
+      <div id="empty" class="empty hidden">
+        <div class="empty-icon">📁</div>
+        <h2>Kein Skin-Ordner gewählt</h2>
+        <p>Wähle einen Ordner mit deinen Skins (PNG, 64×64). Unterordner werden als eigene Ordner angezeigt.</p>
+        <button id="emptyPick" class="glass-btn big">Ordner wählen</button>
+      </div>
+
+      <div id="dropHint" class="drop-hint hidden"><div>Skin hier ablegen</div></div>
+    </section>
+
+    <!-- ===================== Seitenleiste ===================== -->
+    <aside class="side glass-panel">
+      <div class="side-head">
+        <div>
+          <div class="label" id="previewLabel">Aktueller Skin</div>
+          <div class="side-title" id="previewName">–</div>
+        </div>
+        <div class="viewer-tools">
+          <button id="animBtn" class="icon-btn small" title="Animation wechseln">
+            <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg>
+          </button>
+          <button id="backCurrent" class="icon-btn small hidden" title="Zurück zum aktuellen Skin">
+            <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="viewer-wrap">
+        <canvas id="viewer"></canvas>
+        <div id="viewerOverlay" class="viewer-overlay hidden">Kein Account angemeldet</div>
+      </div>
+
+      <div class="seg" id="variantSeg">
+        <button data-v="auto" class="active">Auto</button>
+        <button data-v="classic">Classic</button>
+        <button data-v="slim">Slim</button>
+      </div>
+
+      <button id="applyBtn" class="glass-btn big apply" disabled>
+        <span class="apply-text">Skin anwenden</span>
+        <span class="spinner"></span>
+      </button>
+
+      <div class="section-title">
+        <span>Umhänge <span class="muted" id="capeCount"></span></span>
+        <div class="seg mini" id="capeModeSeg" title="Global: ein Umhang für alle Skins · Pro Skin: jeder Skin merkt sich seinen Umhang">
+          <button data-m="global">Global</button>
+          <button data-m="perSkin">Pro Skin</button>
+        </div>
+      </div>
+      <div id="capeHint" class="cape-hint"></div>
+      <div id="capes" class="capes"></div>
+
+      <div class="side-actions">
+        <button id="saveCurrent" class="ghost-btn" title="Aktuellen Account-Skin im geöffneten Ordner speichern">💾 Speichern</button>
+        <button id="importName" class="ghost-btn" title="Skin eines Spielers per Name laden">👤 Von Spieler</button>
+        <button id="resetSkin" class="ghost-btn" title="Auf Standard-Skin zurücksetzen">↺ Standard</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ===================== Kontextmenü ===================== -->
+  <div id="ctx" class="menu glass-panel ctx hidden"></div>
+
+  <!-- ===================== Einstellungen ===================== -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-card glass-panel">
+      <div class="modal-head">
+        <h2>Einstellungen</h2>
+        <button class="icon-btn" data-close>✕</button>
+      </div>
+
+      <div class="set-group">
+        <div class="label">Farbschema</div>
+        <div id="presets" class="presets"></div>
+      </div>
+
+      <div class="set-group colors">
+        <label>Akzent <input type="color" data-key="accent" /></label>
+        <label>Akzent 2 <input type="color" data-key="accent2" /></label>
+        <label>Hintergrund <input type="color" data-key="bg" /></label>
+        <label>Flächen <input type="color" data-key="surface" /></label>
+        <label>Text <input type="color" data-key="text" /></label>
+      </div>
+
+      <div class="set-group sliders">
+        <label>Glas-Intensität <input type="range" min="0" max="1" step="0.05" data-key="glass" /></label>
+        <label>Eckenradius <input type="range" min="4" max="28" step="1" data-key="radius" /></label>
+        <label class="check"><input type="checkbox" data-key="blobs" /> Animierter Hintergrund</label>
+      </div>
+
+      <div class="set-group">
+        <div class="label">App-Icon (Tray, Fenster & Taskleiste)</div>
+        <div class="icon-pick">
+          <img id="iconPreview" alt="" />
+          <div class="icon-opts">
+            <button class="ghost-btn" data-icon="default">Standard</button>
+            <button class="ghost-btn" data-icon="custom">🖼 Eigenes Bild …</button>
+            <button class="ghost-btn" data-icon="skinHead">🙂 Kopf vom aktuellen Skin</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="set-group sliders">
+        <div class="label">Verhalten</div>
+        <label class="check"><input type="checkbox" id="trayOnClose" /> Beim Schließen in den Tray minimieren</label>
+      </div>
+
+      <details class="set-group adv">
+        <summary>Erweitert</summary>
+        <label>Microsoft Client-ID
+          <input type="text" id="clientId" spellcheck="false" />
+        </label>
+        <p class="muted">Standard: <code>00000000402b5328</code> (Minecraft-Launcher). Nur ändern, wenn du eine eigene, von Mojang freigeschaltete Azure-App nutzt.</p>
+      </details>
+
+      <div class="modal-foot">
+        <button id="themeReset" class="ghost-btn">Zurücksetzen</button>
+        <button class="glass-btn" data-close>Fertig</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== Eingabe-Dialog ===================== -->
+  <div id="promptModal" class="modal hidden">
+    <div class="modal-card glass-panel small">
+      <h2 id="promptTitle"></h2>
+      <input id="promptInput" class="text-input" spellcheck="false" />
+      <div class="modal-foot">
+        <button class="ghost-btn" data-close>Abbrechen</button>
+        <button id="promptOk" class="glass-btn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts"></div>
+
+  <script src="../node_modules/skinview3d/bundles/skinview3d.bundle.js"></script>
+  <script src="skinrender.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

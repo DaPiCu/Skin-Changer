@@ -1,0 +1,54 @@
+/* Tray-Popup – nutzt die Variablen aus style.css */
+html, body.tray { background: transparent; overflow: hidden; }
+body.tray { padding: 0; }
+
+.pop {
+  margin: 0; display: flex; flex-direction: column; gap: 10px; padding: 14px;
+  border-radius: 18px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 45%),
+    color-mix(in srgb, var(--surface) 96%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 14%, transparent);
+  animation: popIn .16s ease;
+}
+@keyframes popIn { from { opacity: 0; transform: translateY(6px) scale(.98); } }
+
+.pop-head { display: flex; align-items: center; gap: 10px; }
+.pop-head > canvas { width: 34px; height: 34px; border-radius: 9px; image-rendering: pixelated; background: var(--line);
+  box-shadow: 0 4px 10px -4px rgba(0,0,0,.6); }
+.who { flex: 1; min-width: 0; }
+.pop-name { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.accs { display: flex; gap: 4px; }
+.accs button { width: 26px; height: 26px; padding: 0; border-radius: 8px; border: 1px solid var(--line); background: var(--line); opacity: .6; transition: opacity .15s, transform .1s; }
+.accs button:hover { opacity: 1; transform: translateY(-1px); }
+.accs button.on { opacity: 1; border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); }
+.accs canvas { width: 100%; height: 100%; border-radius: 7px; image-rendering: pixelated; }
+
+.pop-sec { display: flex; justify-content: space-between; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--muted); padding: 2px 2px 0; }
+
+.list { display: flex; flex-direction: column; gap: 4px; max-height: 430px; overflow-y: auto; margin: 0 -4px; padding: 0 4px; }
+.list::-webkit-scrollbar { width: 6px; }
+.list::-webkit-scrollbar-thumb { background: var(--line); border-radius: 6px; }
+.row {
+  display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 12px; cursor: pointer;
+  border: 1px solid transparent; transition: background .12s, border-color .12s, transform .08s;
+}
+.row:hover { background: color-mix(in srgb, var(--text) 7%, transparent); border-color: var(--line); }
+.row:active { transform: scale(.985); }
+.row canvas { width: 36px; height: 36px; flex-shrink: 0; image-rendering: pixelated; border-radius: 8px;
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)); }
+.row .txt { flex: 1; min-width: 0; }
+.row .n { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .s { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .act { font-size: 10px; font-weight: 700; letter-spacing: .4px; padding: 2px 7px; border-radius: 999px; color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+.row .go { opacity: 0; color: var(--accent2); transition: opacity .12s; }
+.row:hover .go { opacity: 1; }
+.row .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--accent2); animation: spin .7s linear infinite; }
+.row.ok { background: color-mix(in srgb, #3ddc97 14%, transparent); border-color: color-mix(in srgb, #3ddc97 40%, transparent); }
+.row.bad { background: color-mix(in srgb, #ff6b81 14%, transparent); border-color: color-mix(in srgb, #ff6b81 40%, transparent); }
+.empty-row { padding: 18px 8px; text-align: center; color: var(--muted); font-size: 12.5px; }
+.msg { font-size: 11.5px; color: #ff8a9b; padding: 0 4px; }
+
+.open { width: 100%; }

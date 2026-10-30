@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+  <title>SkinSwitcher</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="tray.css" />
+</head>
+<body class="tray">
+  <div class="pop">
+    <div class="pop-head">
+      <canvas id="head" width="34" height="34"></canvas>
+      <div class="who">
+        <div class="label">Aktiver Account</div>
+        <div id="name" class="pop-name">–</div>
+      </div>
+      <div id="accs" class="accs"></div>
+    </div>
+
+    <div class="pop-sec">
+      <span>Zuletzt verwendet</span>
+      <span id="count" class="muted"></span>
+    </div>
+    <div id="list" class="list"></div>
+
+    <button id="open" class="glass-btn open">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
+      App öffnen
+    </button>
+  </div>
+
+  <script src="skinrender.js"></script>
+  <script src="tray.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "name": "skinswitcher",
+  "productName": "SkinSwitcher",
+  "version": "1.2.0",
+  "description": "Minecraft Skin- & Umhang-Wechsler mit Multi-Account-Support",
+  "main": "main.js",
+  "author": "DaPiCu",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win portable nsis"
+  },
+  "dependencies": {
+    "skinview3d": "3.4.2"
+  },
+  "devDependencies": {
+    "electron": "^38.8.6",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "net.dapicu.skinswitcher",
+    "productName": "SkinSwitcher",
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/skinview3d/bundles/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "publish": null
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DaPiCu/Skin-Changer.git"
+  },
+  "homepage": "https://github.com/DaPiCu/Skin-Changer"
+}
